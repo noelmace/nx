@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 export function names(name: string): any {
   return {
     name,
@@ -36,10 +38,5 @@ function toCapitalCase(s: string): string {
  * in the full-path option 'module'
  */
 export function findModuleParent(modulePath) {
-  const parts = (modulePath || []).split('/');
-  if (parts.length) {
-    // remove module name
-    parts.pop();
-  }
-  return parts.join('/');
+  return path.dirname(modulePath);
 }

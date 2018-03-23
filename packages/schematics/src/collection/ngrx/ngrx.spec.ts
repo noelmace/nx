@@ -24,6 +24,7 @@ describe('ngrx', () => {
 
   it('should create the ngrx files', () => {
     const appConfig = getAppConfig();
+    const hasFile = file => expect(tree.exists(file)).toBeTruthy();
     const tree = schematicRunner.runSchematic(
       'ngrx',
       {
@@ -32,22 +33,17 @@ describe('ngrx', () => {
       },
       appTree
     );
-    const hasFile = file => {
-      expect(tree.exists(file)).toBeTruthy();
-    };
-
-    // tree.visit((path) => {
-    //   console.log(path);
-    // });
+    // tree.visit((path) => console.log(path));
 
     const statePath = `${findModuleParent(appConfig.appModule)}/+state`;
 
     hasFile(`${statePath}/user.actions.ts`);
     hasFile(`${statePath}/user.effects.ts`);
     hasFile(`${statePath}/user.effects.spec.ts`);
-    // hasFile(`${statePath}/user.init.ts`);
-    // hasFile(`${statePath}/user.interfaces.ts`);
     hasFile(`${statePath}/user.reducer.ts`);
     hasFile(`${statePath}/user.reducer.spec.ts`);
+
+    hasFile(`${statePath}/user.init.ts`);
+    hasFile(`${statePath}/user.interfaces.ts`);
   });
 });
