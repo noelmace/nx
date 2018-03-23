@@ -30,3 +30,16 @@ export function toFileName(s: string): string {
 function toCapitalCase(s: string): string {
   return s.charAt(0).toUpperCase() + s.substr(1);
 }
+
+/**
+ * Determine the parent directory for the ngModule specified
+ * in the full-path option 'module'
+ */
+export function findModuleParent(modulePath) {
+  const parts = (modulePath || []).split('/');
+  if (parts.length) {
+    // remove module name
+    parts.pop();
+  }
+  return parts.join('/');
+}

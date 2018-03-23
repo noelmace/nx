@@ -1,8 +1,12 @@
 import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
 import { Tree, VirtualTree } from '@angular-devkit/schematics';
-import { createApp, createEmptyWorkspace } from '../../utils/testing-utils';
-import { getFileContent } from '@schematics/angular/utility/test';
+import {
+  createApp,
+  createEmptyWorkspace,
+  getAppConfig
+} from '../../utils/testing-utils';
+import { findModuleParent } from '../../utils/name-utils';
 
 describe('ngrx', () => {
   const schematicRunner = new SchematicTestRunner(
@@ -18,158 +22,32 @@ describe('ngrx', () => {
     appTree = createApp(appTree, 'myapp');
   });
 
-  it('should add empty root', () => {
+  it('should create the ngrx files', () => {
+    const appConfig = getAppConfig();
     const tree = schematicRunner.runSchematic(
       'ngrx',
       {
-        name: 'state',
-        module: 'apps/myapp/src/app/app.module.ts',
-        onlyEmptyRoot: true
+        name: 'user',
+        module: appConfig.appModule
       },
       appTree
     );
+    const hasFile = file => {
+      expect(tree.exists(file)).toBeTruthy();
+    };
 
-    const appModule = getFileContent(tree, '/apps/myapp/src/app/app.module.ts');
-    expect(appModule).toContain(
-      'StoreModule.forRoot({},{metaReducers: !environment.production ? [storeFreeze] : []})'
-    );
-    expect(appModule).toContain('EffectsModule.forRoot');
+    // tree.visit((path) => {
+    //   console.log(path);
+    // });
 
-    expect(tree.exists('apps/myapp/src/app/+state')).toBeFalsy();
-  });
+    const statePath = `${findModuleParent(appConfig.appModule)}/+state`;
 
-  it('should add root', () => {
-    const tree = schematicRunner.runSchematic(
-      'ngrx',
-      {
-        name: 'state',
-        module: 'apps/myapp/src/app/app.module.ts',
-        root: true
-      },
-      appTree
-    );
-
-    const appModule = getFileContent(tree, '/apps/myapp/src/app/app.module.ts');
-    expect(appModule).toContain('StoreModule.forRoot');
-    expect(appModule).toContain('EffectsModule.forRoot');
-    expect(appModule).toContain('!environment.production ? [storeFreeze] : []');
-
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.actions.ts`)
-    ).toBeTruthy();
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.effects.ts`)
-    ).toBeTruthy();
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.effects.spec.ts`)
-    ).toBeTruthy();
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.init.ts`)
-    ).toBeTruthy();
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.interfaces.ts`)
-    ).toBeTruthy();
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.reducer.ts`)
-    ).toBeTruthy();
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.reducer.spec.ts`)
-    ).toBeTruthy();
-  });
-
-  it('should add feature', () => {
-    const tree = schematicRunner.runSchematic(
-      'ngrx',
-      {
-        name: 'state',
-        module: 'apps/myapp/src/app/app.module.ts'
-      },
-      appTree
-    );
-
-    const appModule = getFileContent(tree, '/apps/myapp/src/app/app.module.ts');
-    expect(appModule).toContain('StoreModule.forFeature');
-    expect(appModule).toContain('EffectsModule.forFeature');
-    expect(appModule).not.toContain(
-      '!environment.production ? [storeFreeze] : []'
-    );
-
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.actions.ts`)
-    ).toBeTruthy();
-  });
-
-  it('should add with custom directoryName', () => {
-    const tree = schematicRunner.runSchematic(
-      'ngrx',
-      {
-        name: 'state',
-        module: 'apps/myapp/src/app/app.module.ts',
-        directory: 'myCustomState'
-      },
-      appTree
-    );
-
-    const appModule = getFileContent(tree, '/apps/myapp/src/app/app.module.ts');
-    expect(appModule).toContain('StoreModule.forFeature');
-    expect(appModule).toContain('EffectsModule.forFeature');
-    expect(appModule).not.toContain(
-      '!environment.production ? [storeFreeze] : []'
-    );
-
-    expect(
-      tree.exists(`/apps/myapp/src/app/my-custom-state/state.actions.ts`)
-    ).toBeTruthy();
-  });
-
-  it('should only add files', () => {
-    const tree = schematicRunner.runSchematic(
-      'ngrx',
-      {
-        name: 'state',
-        module: 'apps/myapp/src/app/app.module.ts',
-        onlyAddFiles: true
-      },
-      appTree
-    );
-
-    const appModule = getFileContent(tree, '/apps/myapp/src/app/app.module.ts');
-    expect(appModule).not.toContain('StoreModule');
-    expect(appModule).not.toContain(
-      '!environment.production ? [storeFreeze] : []'
-    );
-
-    expect(
-      tree.exists(`/apps/myapp/src/app/+state/state.actions.ts`)
-    ).toBeTruthy();
-  });
-
-  it('should update package.json', () => {
-    const tree = schematicRunner.runSchematic(
-      'ngrx',
-      {
-        name: 'state',
-        module: 'apps/myapp/src/app/app.module.ts'
-      },
-      appTree
-    );
-    const packageJson = JSON.parse(getFileContent(tree, '/package.json'));
-
-    expect(packageJson.dependencies['@ngrx/store']).toBeDefined();
-    expect(packageJson.dependencies['@ngrx/router-store']).toBeDefined();
-    expect(packageJson.dependencies['@ngrx/effects']).toBeDefined();
-    expect(packageJson.dependencies['ngrx-store-freeze']).toBeDefined();
-  });
-
-  it('should error when no module is provided', () => {
-    expect(() =>
-      schematicRunner.runSchematic(
-        'ngrx',
-        {
-          name: 'state'
-        },
-        appTree
-      )
-    ).toThrow("should have required property 'module'");
+    hasFile(`${statePath}/user.actions.ts`);
+    hasFile(`${statePath}/user.effects.ts`);
+    hasFile(`${statePath}/user.effects.spec.ts`);
+    // hasFile(`${statePath}/user.init.ts`);
+    // hasFile(`${statePath}/user.interfaces.ts`);
+    hasFile(`${statePath}/user.reducer.ts`);
+    hasFile(`${statePath}/user.reducer.spec.ts`);
   });
 });

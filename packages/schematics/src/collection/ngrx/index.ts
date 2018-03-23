@@ -2,6 +2,8 @@ import {
   apply,
   branchAndMerge,
   chain,
+  externalSchematic,
+  SchematicContext,
   mergeWith,
   move,
   noop,
@@ -12,6 +14,7 @@ import {
 } from '@angular-devkit/schematics';
 
 import {
+  findModuleParent,
   names,
   toClassName,
   toFileName,
@@ -25,7 +28,7 @@ import {
   insert
 } from '../../utils/ast-utils';
 import { insertImport } from '@schematics/angular/utility/route-utils';
-import { Schema } from './schema';
+import { NgrxOptions } from './schema';
 import {
   ngrxVersion,
   routerStoreVersion,
@@ -34,7 +37,7 @@ import {
 import { serializeJson } from '../../utils/fileutils';
 import { wrapIntoFormat } from '../../utils/tasks';
 
-function addImportsToModule(name: string, options: Schema): Rule {
+function addImportsToModule(name: string, options: NgrxOptions): Rule {
   return (host: Tree) => {
     if (options.onlyAddFiles) {
       return host;
@@ -197,48 +200,46 @@ function addNgRxToPackageJson() {
     if (!json['dependencies']['@ngrx/store']) {
       json['dependencies']['@ngrx/store'] = ngrxVersion;
     }
-    if (!json['dependencies']['@ngrx/router-store']) {
-      json['dependencies']['@ngrx/router-store'] = routerStoreVersion;
-    }
     if (!json['dependencies']['@ngrx/effects']) {
       json['dependencies']['@ngrx/effects'] = ngrxVersion;
+    }
+    if (!json['dependencies']['@ngrx/entity']) {
+      json['dependencies']['@ngrx/entity'] = ngrxVersion;
     }
     if (!json['dependencies']['@ngrx/store-devtools']) {
       json['dependencies']['@ngrx/store-devtools'] = ngrxVersion;
     }
+    if (!json['dependencies']['@ngrx/router-store']) {
+      json['dependencies']['@ngrx/router-store'] = routerStoreVersion;
+    }
     if (!json['dependencies']['ngrx-store-freeze']) {
       json['dependencies']['ngrx-store-freeze'] = ngrxStoreFreezeVersion;
     }
+
     host.overwrite('package.json', serializeJson(json));
     return host;
   };
 }
 
-export default function(schema: Schema): Rule {
-  return wrapIntoFormat(() => {
-    const options = normalizeOptions(schema);
-    const name = options.name;
-    const moduleDir = path.dirname(options.module);
+export default function(_options: NgrxOptions): Rule {
+  return wrapIntoFormat((context: SchematicContext) => {
+    const options = normalizeOptions(_options);
+    const sourceDir = findModuleParent(options.module);
 
-    if (options.onlyEmptyRoot) {
-      return chain([
-        addImportsToModule(name, options),
-        options.skipPackageJson ? noop() : addNgRxToPackageJson()
-      ]);
-    } else {
-      const templateSource = apply(url('./files'), [
-        template({ ...options, tmpl: '', ...names(name) }),
-        move(moduleDir)
-      ]);
-      return chain([
-        branchAndMerge(chain([mergeWith(templateSource)])),
-        addImportsToModule(name, options),
-        options.skipPackageJson ? noop() : addNgRxToPackageJson()
-      ]);
-    }
+    return chain([
+      externalSchematic('@ngrx/schematics', 'feature', {
+        name: options.name,
+        sourceDir: './',
+        flat: false
+      }),
+      move(`app/${options.name}`, path.join(sourceDir, '+state'))
+    ]);
   });
 }
 
-function normalizeOptions(options: Schema): Schema {
+/**
+ * Extract the parent 'directory' for the specified
+ */
+function normalizeOptions(options: NgrxOptions): NgrxOptions {
   return { ...options, directory: toFileName(options.directory) };
 }
