@@ -1,7 +1,7 @@
 import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
 import { Tree, VirtualTree } from '@angular-devkit/schematics';
-import { createApp, createEmptyWorkspace } from '../../utils/testing-utils';
+import { createApp, createEmptyWorkspace } from '../../utils/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
 import * as stripJsonComments from 'strip-json-comments';
 

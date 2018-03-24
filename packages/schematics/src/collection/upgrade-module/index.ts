@@ -11,27 +11,31 @@ import {
   Tree,
   url
 } from '@angular-devkit/schematics';
+import {
+  getBootstrapComponent,
+  readBootstrapInfo
+} from '@nrwl/schematics/src/utils/ast/bootstrap';
+import {
+  addMethod,
+  addParameterToConstructor
+} from '@nrwl/schematics/src/utils/ast/class';
+import {
+  addDeclarationToModule,
+  addEntryComponents,
+  addImportToModule,
+  addProviderToModule,
+  removeFromNgModule
+} from '@nrwl/schematics/src/utils/ast/module';
 
 import {
   names,
   toClassName,
   toFileName,
   toPropertyName
-} from '../../utils/name-utils';
+} from '../../utils/name';
 import * as path from 'path';
 import * as ts from 'typescript';
-import {
-  addDeclarationToModule,
-  addEntryComponents,
-  addImportToModule,
-  addMethod,
-  addParameterToConstructor,
-  addProviderToModule,
-  getBootstrapComponent,
-  insert,
-  readBootstrapInfo,
-  removeFromNgModule
-} from '../../utils/ast-utils';
+import { insert } from '../../utils/ast/ast';
 import { insertImport } from '@schematics/angular/utility/route-utils';
 import { Schema } from './schema';
 import { angularJsVersion } from '../../lib-versions';

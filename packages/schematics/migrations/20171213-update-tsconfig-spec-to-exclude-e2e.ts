@@ -1,4 +1,4 @@
-import { updateJsonFile } from '../src/utils/fileutils';
+import { updateJsonFile } from '../src/utils/file';
 
 export default {
   description: 'Update tsconfig.spec.json to exclude e2e specs',

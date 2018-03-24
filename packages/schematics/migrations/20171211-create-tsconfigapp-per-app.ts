@@ -2,7 +2,7 @@ import {
   cliConfig,
   readCliConfigFile,
   updateJsonFile
-} from '../src/utils/fileutils';
+} from '../src/utils/file';
 import { writeFileSync, unlinkSync } from 'fs';
 import { offsetFromRoot } from '../src/utils/common';
 import * as path from 'path';

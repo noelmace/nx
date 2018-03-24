@@ -1,4 +1,4 @@
-import { addApp } from './fileutils';
+import { addApp } from './file';
 
 describe('fileutils', () => {
   describe('sortApps', () => {

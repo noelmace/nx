@@ -1,4 +1,4 @@
-import { updateJsonFile } from '../src/utils/fileutils';
+import { updateJsonFile } from '../src/utils/file';
 import { devKitCoreVersion } from '../src/lib-versions';
 
 export default {

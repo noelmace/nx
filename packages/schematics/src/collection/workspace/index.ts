@@ -22,7 +22,7 @@ import {
   schematicsVersion
 } from '../../lib-versions';
 import * as fs from 'fs';
-import { copyFile, serializeJson, updateJsonFile } from '../../utils/fileutils';
+import { copyFile, serializeJson, updateJsonFile } from '../../utils/file';
 import {
   resolveUserExistingPrettierConfig,
   DEFAULT_NRWL_PRETTIER_CONFIG
@@ -30,7 +30,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { tap, map } from 'rxjs/operators';
-import { toFileName } from '../../utils/name-utils';
+import { toFileName } from '../../utils/name';
 
 function updatePackageJson() {
   return (host: Tree) => {

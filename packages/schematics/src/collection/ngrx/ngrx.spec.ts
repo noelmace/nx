@@ -1,12 +1,14 @@
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
 import { Tree, VirtualTree } from '@angular-devkit/schematics';
+import { getFileContent } from '@schematics/angular/utility/test';
+import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
+
 import {
   createApp,
   createEmptyWorkspace,
   getAppConfig
-} from '../../utils/testing-utils';
-import { findModuleParent } from '../../utils/name-utils';
+} from '../../utils/testing';
+import { findModuleParent } from '../../utils/name';
 
 describe('ngrx', () => {
   const schematicRunner = new SchematicTestRunner(
@@ -42,8 +44,26 @@ describe('ngrx', () => {
     hasFile(`${statePath}/user.effects.spec.ts`);
     hasFile(`${statePath}/user.reducer.ts`);
     hasFile(`${statePath}/user.reducer.spec.ts`);
-
     hasFile(`${statePath}/user.init.ts`);
     hasFile(`${statePath}/user.interfaces.ts`);
+  });
+
+  it('should create ngrx action enums', () => {
+    const appConfig = getAppConfig();
+    const tree = schematicRunner.runSchematic(
+      'ngrx',
+      {
+        name: 'user',
+        module: appConfig.appModule
+      },
+      appTree
+    );
+
+    const statePath = `${findModuleParent(appConfig.appModule)}/+state`;
+    const content = getFileContent(tree, `${statePath}/user.actions.ts`);
+
+    expect(content).toContain('UserActionTypes');
+    expect(content).toContain("LoadData = '[User] Load Data'");
+    expect(content).toContain("DataLoaded = '[User] Data Loaded'");
   });
 });

@@ -1,7 +1,7 @@
 import { writeFileSync, readFileSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
-import { updateJsonFile } from '../src/utils/fileutils';
+import { updateJsonFile } from '../src/utils/file';
 import {
   ExistingPrettierConfig,
   resolveUserExistingPrettierConfig

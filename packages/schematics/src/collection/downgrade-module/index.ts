@@ -1,11 +1,11 @@
 import { chain, noop, Rule, Tree } from '@angular-devkit/schematics';
+import { readBootstrapInfo } from '@nrwl/schematics/src/utils/ast/bootstrap';
+import { addMethod } from '@nrwl/schematics/src/utils/ast/class';
 import {
   addEntryComponents,
-  addMethod,
-  insert,
-  readBootstrapInfo,
   removeFromNgModule
-} from '../../utils/ast-utils';
+} from '@nrwl/schematics/src/utils/ast/module';
+import { insert } from '../../utils/ast/ast';
 import { Schema } from './schema';
 import { addUpgradeToPackageJson } from '../../utils/common';
 import { wrapIntoFormat } from '../../utils/tasks';

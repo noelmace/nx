@@ -1,9 +1,12 @@
+import * as path from 'path';
+import * as ts from 'typescript';
+import * as stringUtils from '../../utils/strings';
+
 import {
   apply,
   branchAndMerge,
   chain,
   externalSchematic,
-  SchematicContext,
   SchematicsException,
   mergeWith,
   move,
@@ -13,6 +16,14 @@ import {
   Tree,
   url
 } from '@angular-devkit/schematics';
+import { insertImport } from '@schematics/angular/utility/route-utils';
+
+import { NgrxOptions } from './schema';
+import {
+  ngrxVersion,
+  routerStoreVersion,
+  ngrxStoreFreezeVersion
+} from '../../lib-versions';
 
 import {
   findModuleParent,
@@ -20,23 +31,11 @@ import {
   toClassName,
   toFileName,
   toPropertyName
-} from '../../utils/name-utils';
-import * as path from 'path';
-import * as ts from 'typescript';
-import {
-  addImportToModule,
-  addProviderToModule,
-  insert
-} from '../../utils/ast-utils';
-import * as stringUtils from '../../utils/strings';
-import { insertImport } from '@schematics/angular/utility/route-utils';
-import { NgrxOptions } from './schema';
-import {
-  ngrxVersion,
-  routerStoreVersion,
-  ngrxStoreFreezeVersion
-} from '../../lib-versions';
-import { serializeJson } from '../../utils/fileutils';
+} from '../../utils/name';
+import { addClass, addEnumeratorValues } from '../../utils/ast/class';
+import { addImportToModule, addProviderToModule } from '../../utils/ast/module';
+import { insert } from '../../utils/ast/ast';
+import { serializeJson } from '../../utils/file';
 import { wrapIntoFormat } from '../../utils/tasks';
 
 export interface RequestContext {
@@ -104,14 +103,15 @@ function generateNgrxFiles(context: RequestContext) {
  */
 function addLoadDataToActions(context: RequestContext): Rule {
   return (host: Tree) => {
-    const componentPath = `${context.moduleDir}/+state/${
+    const clazzName = toClassName(context.featureName);
+    const componentPath = `${context.moduleDir}/+state/${stringUtils.dasherize(
       context.featureName
-    }.actions.ts`;
+    )}.actions.ts`;
+
     const text = host.read(componentPath);
     if (text === null) {
       throw new SchematicsException(`File ${componentPath} does not exist.`);
     }
-
     const sourceText = text.toString('utf-8');
     const source = ts.createSourceFile(
       componentPath,
@@ -119,6 +119,41 @@ function addLoadDataToActions(context: RequestContext): Rule {
       ts.ScriptTarget.Latest,
       true
     );
+
+    insert(host, componentPath, [
+      ...addEnumeratorValues(source, componentPath, `${clazzName}ActionTypes`, [
+        {
+          name: 'LoadData',
+          value: `[${clazzName}] Load Data`
+        },
+        {
+          name: 'DataLoaded',
+          value: `[${clazzName}] Data Loaded`
+        }
+      ]),
+      addClass(
+        source,
+        componentPath,
+        'LoadData',
+        `
+          export class LoadData implements Action {
+           readonly type = ${clazzName}ActionTypes.LoadData;
+           constructor(public payload: any) { }
+          }
+        `
+      ),
+      addClass(
+        source,
+        componentPath,
+        'DataLoaded',
+        `
+          export class DataLoaded implements Action {
+           readonly type = ${clazzName}ActionTypes.DataLoaded;
+           constructor(public payload: any) { }
+          }
+        `
+      )
+    ]);
   };
 }
 

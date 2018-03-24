@@ -9,19 +9,19 @@ import {
   Tree,
   url
 } from '@angular-devkit/schematics';
+import { addGlobal } from '@nrwl/schematics/src/utils/ast/class';
+import { addIncludeToTsConfig } from '@nrwl/schematics/src/utils/ast/config';
+import {
+  addImportToModule,
+  addReexport
+} from '@nrwl/schematics/src/utils/ast/module';
+import { addRoute } from '@nrwl/schematics/src/utils/ast/route';
 import { Schema } from './schema';
 import * as path from 'path';
-import { addApp, cliConfig, serializeJson } from '../../utils/fileutils';
+import { addApp, cliConfig, serializeJson } from '../../utils/file';
 import { insertImport } from '@schematics/angular/utility/route-utils';
 import * as ts from 'typescript';
-import {
-  addGlobal,
-  addImportToModule,
-  addIncludeToTsConfig,
-  addReexport,
-  addRoute,
-  insert
-} from '../../utils/ast-utils';
+import { insert } from '../../utils/ast/ast';
 import { offsetFromRoot } from '../../utils/common';
 import { wrapIntoFormat } from '../../utils/tasks';
 import {
@@ -29,7 +29,7 @@ import {
   toClassName,
   toFileName,
   toPropertyName
-} from '../../utils/name-utils';
+} from '../../utils/name';
 
 interface NormalizedSchema extends Schema {
   name: string;
