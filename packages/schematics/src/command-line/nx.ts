@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import * as yargsParser from 'yargs-parser';
-
 import { affected } from './affected';
 import { format } from './format';
 import { update } from './update';
@@ -18,32 +17,22 @@ const processedArgs = yargsParser(process.argv, {
 const command = processedArgs._[2];
 const args = process.argv.slice(3);
 
-switch (command) {
-  case 'affected':
-    affected(args);
-    break;
-  case 'dep-graph':
-    generateGraph(yargsParser(args));
-    break;
-  case 'format':
-    format(args);
-    break;
-  case 'migrate': // TODO: delete this after 1.0
-    update(args);
-    break;
-  case 'update':
-    update(args);
-    break;
-  case 'lint':
-    lint();
-    break;
-  case 'postinstall':
+const commands = {
+  'affected': affected,
+  'dep-graph': (args) => generateGraph(yargsParser(args)),
+  'format': format,
+  'migrate': update, // TODO: delete this after 1.0
+  'update': update,
+  'lint': lint,
+  'postinstall': () => {
     patchNg();
     update(['check']);
-    break;
-  case 'workspace-schematic':
-    workspaceSchematic(args);
-    break;
-  default:
-    throw new Error(`Unrecognized command '${command}'`);
+  },
+  'workspace-schematic': workspaceSchematic
+};
+
+if (!commands[command]) {
+  throw new Error(`Unrecognized command '${command}'`);
 }
+
+commands[command](args);
