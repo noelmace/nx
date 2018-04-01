@@ -1,5 +1,3 @@
-
-
 export abstract class Command {
 
   printHelp(_options: any): void {
@@ -38,11 +36,15 @@ export abstract class Command {
   abstract readonly options: Option[];
 }
 
+export abstract class RootCommand extends Command {
+  abstract readonly subCommands: { [key : string]: Command };
+}
+
 export abstract class Option {
-    abstract readonly name: string;
-    abstract readonly description: string;
-    readonly default?: string | number | boolean;
-    readonly required?: boolean;
-    abstract readonly aliases?: string[];
-    abstract readonly type: any;
-  }
+  abstract readonly name: string;
+  abstract readonly description: string;
+  readonly default?: string | number | boolean;
+  readonly required?: boolean;
+  abstract readonly aliases?: string[];
+  abstract readonly type: any;
+}

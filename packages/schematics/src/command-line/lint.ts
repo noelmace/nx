@@ -1,17 +1,17 @@
+import { RootCommand } from './models';
 import { getProjectNodes, readCliConfig, allFilesInDir } from './shared';
 import { WorkspaceIntegrityChecks } from './workspace-integrity-checks';
 import * as appRoot from 'app-root-path';
 import * as path from 'path';
 import * as fs from 'fs';
-import { Command, Option } from './models';
 
-export default class Lint extends Command {
-  readAllFilesFromAppsAndLibs() {
-    return [
-      ...allFilesInDir(`${appRoot.path}/apps`),
-      ...allFilesInDir(`${appRoot.path}/libs`)
-    ].filter(f => !path.basename(f).startsWith('.'));
-  }
+export default class Lint extends RootCommand {
+
+  name= 'lint';
+  description = 'lint';
+  arguments = [];
+  options = [];
+  subCommands = {};
 
   run(options: any) {
     const nodes = getProjectNodes(readCliConfig());
@@ -34,8 +34,10 @@ export default class Lint extends Command {
     }
   }
 
-  name= 'lint';
-  description = 'lint';
-  arguments = [];
-  options = [];
+  private readAllFilesFromAppsAndLibs() {
+    return [
+      ...allFilesInDir(`${appRoot.path}/apps`),
+      ...allFilesInDir(`${appRoot.path}/libs`)
+    ].filter(f => !path.basename(f).startsWith('.'));
+  }
 }
