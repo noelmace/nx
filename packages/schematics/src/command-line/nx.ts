@@ -4,9 +4,10 @@ import { affected } from './affected';
 import { format } from './format';
 import { update } from './update';
 import { patchNg } from './patch-ng';
-import { lint } from './lint';
 import { workspaceSchematic } from './workspace-schematic';
 import { generateGraph } from './dep-graph';
+import { postinstall } from './postinstall';
+import Lint from './lint';
 
 const processedArgs = yargsParser(process.argv, {
   alias: {
@@ -22,12 +23,9 @@ const commands = {
   'dep-graph': (args) => generateGraph(yargsParser(args)),
   'format': format,
   'migrate': update, // TODO: delete this after 1.0
+  'lint': new Lint().run,
   'update': update,
-  'lint': lint,
-  'postinstall': () => {
-    patchNg();
-    update(['check']);
-  },
+  'postinstall': postinstall,
   'workspace-schematic': workspaceSchematic
 };
 
