@@ -1,5 +1,5 @@
 {
-  "name": "@nrwl/cli",
+  "name": "@slp/nx-cli",
   "version": "0.0.1",
   "description": "Nrwl Extensions for Angular: CLI",
   "repository": {

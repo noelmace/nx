@@ -7,7 +7,7 @@ import {
   DependencyType,
   ProjectNode,
   ProjectType
-} from '@nrwl/cli';
+} from '@slp/nx-cli';
 
 describe('Enforce Module Boundaries', () => {
   it('should not error when everything is in order', () => {

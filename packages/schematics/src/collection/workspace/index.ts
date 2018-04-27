@@ -20,7 +20,8 @@ import {
   nxVersion,
   prettierVersion,
   routerStoreVersion,
-  schematicsVersion
+  schematicsVersion,
+  cliVersion
 } from '../../lib-versions';
 import * as fs from 'fs';
 import { updateJsonFile } from '../../utils/fileutils';
@@ -72,8 +73,8 @@ function updatePackageJson() {
     if (!packageJson.devDependencies['@nrwl/schematics']) {
       packageJson.devDependencies['@nrwl/schematics'] = schematicsVersion;
     }
-    if (!packageJson.devDependencies['@nrwl/cli']) {
-      packageJson.devDependencies['@nrwl/cli'] = schematicsVersion;
+    if (!packageJson.devDependencies['@slp/nx-cli']) {
+      packageJson.devDependencies['@slp/nx-cli'] = cliVersion;
     }
     if (!packageJson.dependencies['@angular/cli']) {
       packageJson.dependencies['@angular/cli'] = angularCliVersion;

@@ -15,8 +15,8 @@
     "paths": {
       "@nrwl/schematics": ["./packages/schematics"],
       "@nrwl/schematics/*": ["./packages/schematics/*"],
-      "@nrwl/cli": ["./packages/cli"],
-      "@nrwl/cli/*": ["./packages/cli/*"]
+      "@slp/nx-cli": ["./packages/cli"],
+      "@slp/nx-cli/*": ["./packages/cli/*"]
     }
   },
   "exclude": [

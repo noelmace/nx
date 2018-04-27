@@ -6,6 +6,7 @@ export const ngrxStoreFreezeVersion = '^0.2.1';
 export const routerStoreVersion = '5.0.1';
 export const nxVersion = '*';
 export const schematicsVersion = '*';
+export const cliVersion = '*';
 export const angularCliSchema =
   './node_modules/@nrwl/schematics/src/schema.json';
 export const latestMigration = '20180424-add-tsconfig-tools';
