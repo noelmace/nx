@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/nrwl/nx.svg?branch=master)](https://travis-ci.org/nrwl/nx)
 [![npm version](https://badge.fury.io/js/%40nrwl%2Fnx.svg)](https://www.npmjs.com/@nrwl/nx)
 
+> # This version is a fork that is not intended to be merged with [the original repository](https://github.com/nrwl/nx). See [the other branches](https://github.com/noelmace/nx/branches/yours) and their [associated PRs](https://github.com/nrwl/nx/pulls?utf8=%E2%9C%93&q=is%3Apr+author%3Anoelmace+) for more information on the associated reintegration efforts.
 # Nrwl Extensions for Angular
 
 <img src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png">
