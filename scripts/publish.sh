@@ -23,8 +23,12 @@ do
 
   PACKAGE_NAME=`node -e "console.log(require('./package.json').name)"`
 
-  echo "Publishing ${PACKAGE_NAME}@${VERSION} --tag ${TAG}"
-  npm publish --tag $TAG
+  if [[ $PACKAGE_NAME == "@slp/"* ]]; then
+    echo "Publishing ${PACKAGE_NAME}@${VERSION} --tag ${TAG}"
+    npm publish --tag $TAG
+  else
+    echo "Not publishing ${PACKAGE_NAME}@${VERSION} as this is not a forked package."
+  fi
 
   cd $ORIG_DIRECTORY
 done
