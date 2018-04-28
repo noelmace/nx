@@ -133,6 +133,7 @@ const options = {
   github: {
     preRelease: parsedVersion.isPrerelease,
     release: true,
+    releaseName: "Fork @slp/nx-* - Release %s",
     /**
      * The environment variable containing a valid GitHub
      * auth token with "repo" access (no other permissions required)
