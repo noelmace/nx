@@ -145,6 +145,15 @@ const options = {
      * able to understand our multi-package setup.
      */
     release: false
+  },
+  src: {
+    /**
+     * @slp (http://github.com/noelmace/nx) fork
+     * specific configuration
+     */
+    commitMessage: "Fork @slp (noelmace) - Release %s",
+    tagName: "slp@%s",
+    tagAnnotation: "Fork @slp (noelmace) - Release %s"
   }
 };
 
