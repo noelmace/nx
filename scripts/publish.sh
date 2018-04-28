@@ -25,7 +25,7 @@ do
 
   if [[ $PACKAGE_NAME == "@slp/"* ]]; then
     echo "Publishing ${PACKAGE_NAME}@${VERSION} --tag ${TAG}"
-    npm publish --tag $TAG
+    npm publish --tag $TAG --access public
   else
     echo "Not publishing ${PACKAGE_NAME}@${VERSION} as this is not a forked package."
   fi
