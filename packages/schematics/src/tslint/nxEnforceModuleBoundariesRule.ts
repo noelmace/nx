@@ -4,13 +4,13 @@ import { IOptions } from 'tslint';
 import * as ts from 'typescript';
 import { readFileSync } from 'fs';
 import * as appRoot from 'app-root-path';
-import { getProjectNodes, readDependencies } from '@slp/nx-cli';
+import { getProjectNodes, readDependencies } from '@mace/nx-cli';
 import {
   Dependency,
   DependencyType,
   ProjectNode,
   ProjectType
-} from '@slp/nx-cli';
+} from '@mace/nx-cli';
 
 export class Rule extends Lint.Rules.AbstractRule {
   constructor(

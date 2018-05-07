@@ -133,7 +133,7 @@ const options = {
   github: {
     preRelease: parsedVersion.isPrerelease,
     release: true,
-    releaseName: "Fork @slp/nx-* - Release %s",
+    releaseName: "Fork @mace/nx-* - Release %s",
     /**
      * The environment variable containing a valid GitHub
      * auth token with "repo" access (no other permissions required)
@@ -149,12 +149,12 @@ const options = {
   },
   src: {
     /**
-     * @slp (http://github.com/noelmace/nx) fork
+     * @mace (http://github.com/noelmace/nx) fork
      * specific configuration
      */
-    commitMessage: "Fork @slp (noelmace) - Release %s",
-    tagName: "slp@%s",
-    tagAnnotation: "Fork @slp (noelmace) - Release %s"
+    commitMessage: "Fork @mace (noelmace) - Release %s",
+    tagName: "mace@%s",
+    tagAnnotation: "Fork @mace (noelmace) - Release %s"
   }
 };
 

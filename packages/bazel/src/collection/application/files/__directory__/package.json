@@ -46,7 +46,7 @@
   "devDependencies": {
     "@angular/cli": "<%= angularCliVersion %>",
     "@angular/compiler-cli": "<%= angularVersion %>",
-    "@slp/nx-cli": "<%= cliVersion %>",
+    "@mace/nx-cli": "<%= cliVersion %>",
     "@nrwl/schematics": "<%= schematicsVersion %>",
     "@nrwl/bazel": "<%= schematicsVersion %>",
     "@angular/language-service": "<%= angularVersion %>",

@@ -23,7 +23,7 @@ do
 
   PACKAGE_NAME=`node -e "console.log(require('./package.json').name)"`
 
-  if [[ $PACKAGE_NAME == "@slp/"* ]]; then
+  if [[ $PACKAGE_NAME == "@mace/"* ]]; then
     echo "Publishing ${PACKAGE_NAME}@${VERSION} --tag ${TAG}"
     npm publish --tag $TAG --access public
   else

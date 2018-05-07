@@ -23,7 +23,7 @@
         "node_modules/@angular/tsc-wrapped/**",
         "node_modules/@nrwl/bazel/**",
         "node_modules/@nrwl/schematics/**",
-        "node_modules/@slp/nx-cli/**",
+        "node_modules/@mace/nx-cli/**",
         "node_modules/@ngrx/schematics/**",
     ]
 }
